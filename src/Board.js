@@ -147,7 +147,7 @@
       var rows = this.rows();
       var majorDiagonalColumnIndexAtFirstRowCopy = majorDiagonalColumnIndexAtFirstRow;
       var counter = 0;
-      for (var i = 0; i < rows.length; i++) {
+      for (var i = -(rows.length - 1); i < rows.length; i++) {
         if (rows[i][majorDiagonalColumnIndexAtFirstRowCopy] === 1) {
           counter++;
         }
@@ -162,14 +162,40 @@
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
       var rows = this.rows();
-      for (var i = 0; i < rows.length - 1; i += 2) {
-        for (var j = 0; j < rows[i].length - 1; j++) {
-          if (rows[i][j] === 1 && rows[i + 1][j + 1] === 1) {
+      var checkMinor = function(rowToCheck, columnToCheck) {
+        var columnToCheckCopy = columnToCheck;
+        var counter = 0;
+        for (var i = rowToCheck; i < rows.length; i++) {
+          if (rows[i][columnToCheckCopy] === 1) {
+            counter++;
+          }
+          columnToCheckCopy++;
+        }
+        if (counter > 1) {
+          return true;
+        }
+        return false;
+      };
+      
+      for (var i = 0; i < rows.length; i++) {
+        for (var j = 0; j < rows[i].length; j++) {
+          if (checkMinor(i, j)) {
             return true;
           }
         }
       }
-      return false; // fixme
+      // var rows = this.rows();
+      // for (var i = 0; i < rows.length; i++) {
+      //   for (var j = 0; j < rows[i].length; j++) {
+      //     if (this.hasMajorDiagonalConflictAt(rows.indexOf(rows[i][j]))) {
+      //       return true;
+      //     }
+      //     if (rows[i][j] === 1 && rows[i + 1][j + 1] === 1) {
+      //       return true;
+      //     }
+      //   }
+      // }
+      // return false; // fixme
     },
 
 
@@ -197,22 +223,52 @@
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
       var rows = this.rows();
-      for (var i = 0; i < rows.length - 1; i += 2) {
-        for (var j = rows[i].length - 1; j > 0; j--) {
-          if (rows[i][j] === 1 && rows[i + 1][j - 1] === 1) {
+      var checkMinor = function(rowToCheck, columnToCheck) {
+        var columnToCheckCopy = columnToCheck;
+        var counter = 0;
+        for (var i = rowToCheck; i < rows.length; i++) {
+          if (rows[i][columnToCheckCopy] === 1) {
+            counter++;
+          }
+          columnToCheckCopy--;
+        }
+        if (counter > 1) {
+          return true;
+        }
+        return false;
+      };
+      
+      for (var i = 0; i < rows.length; i++) {
+        for (var j = 0; j < rows[i].length; j++) {
+          if (checkMinor(i, j)) {
             return true;
           }
         }
       }
-      for (var i = 1; i < rows.length - 1; i += 2) {
-        for (var j = rows[i].length - 1; j > 0; j--) {
-          if (rows[i][j] === 1 && rows[i + 1][j - 1] === 1) {
-            return true;
-          }
-        }
-      }
+      // var firstRow = this.rows()[0];
+      // var output = false;
+      // for (var i = -(firstRow.length - 1); i < firstRow.length; i++) {
+      //   if (hasMinorDiagonalConflictAt(i)) {
+      //     output = true;
+      //   }
+      // }
+        
+        
+        
+      //   for (var j = rows[i].length - 1; j > 0; j--) {
+      //     // if (this.hasMinorDiagonalConflictAt(rows.indexOf(rows[i][j]))) {
+      //     //   return true;
+      //     // }
+      //     // if (rows[i][j] === 1 && rows[i + 1][j - 1] === 1) {
+      //     //   return true;
+      //     // }
+      //     // if (this.hasMinorDiagonalConflictAt(j)) {
+      //     //   return true;
+      //     // }
+      //   }
+      //}
       return false; // fixme
-    }
+    },
 
     /*--------------------  End of Helper Functions  ---------------------*/
 
